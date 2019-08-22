@@ -27,8 +27,11 @@ public class Duke {
                     }
                 }
                 else if (first.equals("done")) {
-                    if (command.length < 2 || command.length > 2) {
+                    if (command.length < 2 ) {
                         throw new IncompleteCommandException(error);
+                    }
+                    if(command.length > 2){
+                        throw new IndexOffBoundException();
                     }
                     int second = Integer.parseInt(command[1]) - 1;
 
