@@ -71,6 +71,19 @@ public class Duke {
                     theEnd = false;
                     System.out.println("Bye. Hope to see you again soon!");
                 }
+                else if(first.equals("delete")){
+                    if (command.length < 2) {
+                        throw new IncompleteCommandException(error);
+                    }
+                    if(Integer.parseInt(command[1]) > tasks.size()){
+                        throw new IndexOffBoundException();
+                    }
+                    int second = Integer.parseInt(command[1]) - 1;
+
+                    System.out.println("Noted. I've removed this task:\n" + tasks.get(second)
+                            + "\nNow you have " + (tasks.size() - 1) + " tasks in the list." );
+                    tasks.remove(second);
+                }
                 else {
                     throw new InvalidCommandException("I'm sorry, but I don't know what that means :-(");
                 }
