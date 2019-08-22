@@ -60,13 +60,15 @@ public class Duke {
                     if (command.length < 2) {
                         throw new IncompleteCommandException(error);
                     }
-                    tasks.add(new ToDo(command[2]));
+                    String todo = input.substring(5);
+                    tasks.add(new ToDo(todo));
                     System.out.println("Got it. I've added this task:\n" + tasks.get(tasks.size() - 1)
                             + "\nNow you have " + tasks.size() + " tasks in the list");
                 } else if (input.equals("bye")) {
                     theEnd = false;
                     System.out.println("Bye. Hope to see you again soon!");
-                } else {
+                }
+                else {
                     throw new InvalidCommandException("I'm sorry, but I don't know what that means :-(");
                 }
                 input = sc.nextLine();
