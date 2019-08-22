@@ -30,7 +30,7 @@ public class Duke {
                     if (command.length < 2 ) {
                         throw new IncompleteCommandException(error);
                     }
-                    if(command.length > 2){
+                    if(Integer.parseInt(command[1]) > tasks.size()){
                         throw new IndexOffBoundException();
                     }
                     int second = Integer.parseInt(command[1]) - 1;
