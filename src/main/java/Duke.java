@@ -51,7 +51,7 @@ public class Duke {
                     }
                     String[] msg = input.split("/by");
 
-                    tasks.add(new Deadline(msg[0].trim(), msg[1].trim()));
+                    tasks.add(new Deadline(msg[0].trim().substring(8), msg[1].trim()));
                     printTaskAdded();
                     input = sc.nextLine();
 
@@ -61,7 +61,7 @@ public class Duke {
                     }
                     String[] msg = input.split("/at");
 
-                    tasks.add(new Event(msg[0].trim(), msg[1].trim()));
+                    tasks.add(new Event(msg[0].trim().substring(5), msg[1].trim()));
                     printTaskAdded();
                     input = sc.nextLine();
 
@@ -131,14 +131,14 @@ public class Duke {
                 tasks.add(toDoTask);
                 break;
             case "D":
-                Task deadlineTask = new Deadline(taskDetails[2].trim(), taskDetails[3].trim());
+                Task deadlineTask = new Deadline(taskDetails[2], taskDetails[3].trim());
                 if (isDone) {
                     deadlineTask.markAsDone();
                 }
                 tasks.add(deadlineTask);
                 break;
             case "E":
-                Task eventTask = new Event(taskDetails[2].trim(), taskDetails[3].trim());
+                Task eventTask = new Event(taskDetails[2], taskDetails[3].trim());
                 if (isDone) {
                     eventTask.markAsDone();
                 }
@@ -161,18 +161,15 @@ public class Duke {
                 done = task.isDone() ? "1" : "0";
                 if (task instanceof ToDo) {
                     taskFormat = String.format("T | %s | %s", done, task.getDescription());
-                    System.out.println(taskFormat);
                     fileWriter.write(taskFormat + "\n");
                 }
                 if (task instanceof Deadline) {
                     taskFormat = String.format("D | %s | %s | %s", done, task.getDescription(), ((Deadline) task).getDateTime());
                     fileWriter.write(taskFormat + "\n");
-                    System.out.println(taskFormat);
                 }
                 if (task instanceof Event) {
                     taskFormat = String.format("E | %s | %s | %s", done, task.getDescription(), ((Event) task).getDateTime());
                     fileWriter.write(taskFormat + "\n");
-                    System.out.println(taskFormat);
                 }
             }
             fileWriter.close();
@@ -180,7 +177,7 @@ public class Duke {
             System.out.println("file not found");
         }
     }
-    
+
     private static void printTaskAdded() {
         System.out.println("Got it. I've added this task:\n" + tasks.get(tasks.size() - 1)
                 + "\nNow you have " + tasks.size() + " tasks in the list");
