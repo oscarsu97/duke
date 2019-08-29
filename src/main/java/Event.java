@@ -2,9 +2,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Event extends Task {
-    private String dateTime;
     private LocalDateTime localDateTime;
     private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/YYYY HHmm");
+    private String dateTime;
 
     public Event(String description, String dateTime) {
         super(description);
@@ -21,13 +21,12 @@ public class Event extends Task {
         localDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, min);
     }
 
-    public String getDateTime() {
+    public String getDateTime(){
         return dateTime;
     }
 
     @Override
-
     public String toString() {
-        return String.format("[D][%s] %s(at: %s)", getStatusIcon(), description, localDateTime.format(dateTimeFormat));
+        return String.format("[E][%s] %s(at: %s)", getStatusIcon(), description, localDateTime.format(dateTimeFormat));
     }
 }
