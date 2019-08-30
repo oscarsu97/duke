@@ -1,3 +1,5 @@
+package Duke.DukeException;
+
 public class InvalidCommandException extends Exception {
 
     public String msg;

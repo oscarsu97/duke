@@ -1,3 +1,8 @@
+import Duke.Parser.Parser;
+import Duke.Storage.Storage;
+import Duke.Task.TaskList;
+import Duke.Ui.Ui;
+
 import java.io.File;
 
 public class Duke {

@@ -1,3 +1,5 @@
+package Duke.DukeException;
+
 public class IndexOffBoundException extends Exception {
 
     @Override

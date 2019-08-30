@@ -1,3 +1,14 @@
+package Duke.Parser;
+
+import Duke.DukeException.IncompleteCommandException;
+import Duke.DukeException.IndexOffBoundException;
+import Duke.DukeException.InvalidCommandException;
+import Duke.Task.Deadline;
+import Duke.Task.Event;
+import Duke.Task.TaskList;
+import Duke.Task.ToDo;
+import Duke.Ui.Ui;
+
 import java.util.Scanner;
 
 public class Parser {
