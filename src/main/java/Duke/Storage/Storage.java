@@ -25,10 +25,10 @@ public class Storage {
     public ArrayList<Task> load() {
         try {
             sc = new Scanner(new File(filePath));
+            readFile();
         } catch (FileNotFoundException e) {
             System.out.println("could not find file");
         }
-        readFile();
         return tasks;
     }
 

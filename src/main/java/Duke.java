@@ -17,8 +17,8 @@ public class Duke {
         storage = new Storage(filePath);
         taskList = new TaskList(storage.load());
         parser = new Parser(taskList, ui);
-        taskList = new TaskList();
     }
+
 
     public void run() {
         ui.showWelcome();
