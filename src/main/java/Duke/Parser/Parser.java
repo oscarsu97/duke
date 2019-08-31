@@ -3,19 +3,17 @@ package Duke.Parser;
 import Duke.DukeException.IncompleteCommandException;
 import Duke.DukeException.IndexOffBoundException;
 import Duke.DukeException.InvalidCommandException;
-import Duke.Task.Deadline;
-import Duke.Task.Event;
-import Duke.Task.TaskList;
-import Duke.Task.ToDo;
+import Duke.Task.*;
 import Duke.Ui.Ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Parser class that deals with making sense of the user command.
  */
 public class Parser {
-    private TaskList tasklist;
+    private TaskList taskList;
     private Scanner sc;
     private Ui ui;
 
@@ -26,7 +24,7 @@ public class Parser {
      * @param ui       object that deals with interaction with user
      */
     public Parser(TaskList taskList, Ui ui) {
-        this.tasklist = taskList;
+        this.taskList = taskList;
         sc = new Scanner(System.in);
         this.ui = ui;
     }
@@ -57,10 +55,7 @@ public class Parser {
                 }
             }
             if (taskType.equals("list")) {
-                ui.printTaskList();
-                for (int i = 1; i <= tasklist.getTaskListSize(); i++) {
-                    System.out.println("" + i + ". " + tasklist.getTask(i - 1));
-                }
+                ui.printTaskList(taskList);
                 input = sc.nextLine();
             } else if (taskType.equals("done")) {
                 isInComplete = checkIncompleteCommand(input, 2);
@@ -75,8 +70,8 @@ public class Parser {
                 }
                 int index = Integer.parseInt(taskDetails[1]) - 1;
 
-                tasklist.getTask(index).markAsDone();
-                ui.printMarkedTask(tasklist.getTask(index));
+                taskList.getTask(index).markAsDone();
+                ui.printMarkedTask(taskList.getTask(index));
                 input = sc.nextLine();
 
             } else if (taskType.equals("deadline")) {
@@ -92,41 +87,44 @@ public class Parser {
                     input = sc.nextLine();
                     continue;
                 }
-                tasklist.addTask(new Deadline(msg[0].trim().substring(8).trim(), msg[1].trim()));
+                taskList.addTask(new Deadline(msg[0].trim().substring(8).trim(), msg[1].trim()));
 
-                int taskListSize = tasklist.getTaskListSize();
+                int taskListSize = taskList.getTaskListSize();
 
-                ui.printTaskAdded(tasklist.getTask(taskListSize - 1), taskListSize);
+                ui.printTaskAdded(taskList.getTask(taskListSize - 1), taskListSize);
                 input = sc.nextLine();
 
             } else if (taskType.equals("event")) {
-
                 String[] msg = input.split("/at");
+
+                //Check whether the task description is complete
                 isInComplete = checkIncompleteCommand(msg[0], 2);
                 if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
+                // Check whether date and time format is complete
                 isInComplete = checkIncompleteCommand(msg[1], 2);
                 if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
-                tasklist.addTask(new Event(msg[0].trim().substring(5).trim(), msg[1].trim()));
+                taskList.addTask(new Event(msg[0].trim().substring(5).trim(), msg[1].trim()));
 
-                int taskListSize = tasklist.getTaskListSize();
+                int taskListSize = taskList.getTaskListSize();
 
-                ui.printTaskAdded(tasklist.getTask(taskListSize - 1), taskListSize);
+                ui.printTaskAdded(taskList.getTask(taskListSize - 1), taskListSize);
                 input = sc.nextLine();
 
             } else if (taskType.equals("todo")) {
                 checkIncompleteCommand(input, 2);
                 String toDo = input.substring(5);
-                tasklist.addTask(new ToDo(toDo));
 
-                int taskListSize = tasklist.getTaskListSize();
+                taskList.addTask(new ToDo(toDo));
 
-                ui.printTaskAdded(tasklist.getTask(taskListSize - 1), taskListSize);
+                int taskListSize = taskList.getTaskListSize();
+
+                ui.printTaskAdded(taskList.getTask(taskListSize - 1), taskListSize);
                 input = sc.nextLine();
 
             } else if (input.equals("bye")) {
@@ -145,14 +143,25 @@ public class Parser {
                     continue;
                 }
                 int index = Integer.parseInt(taskDetails[1]) - 1;
-                int taskListSize = tasklist.getTaskListSize();
-
-                ui.printRemoveTask(tasklist.getTask(index), taskListSize - 1);
-                tasklist.deleteTask(index);
+                int taskListSize = taskList.getTaskListSize();
+                ui.printRemoveTask(taskList.getTask(index), taskList.getTaskListSize() - 1);
+                taskList.deleteTask(index);
+                input = sc.nextLine();
+            } else if (taskType.equals("find")) {
+                isInComplete = checkIncompleteCommand(input, 2);
+                if (isInComplete) {
+                    input = sc.nextLine();
+                    continue;
+                }
+                String keyword = input.substring(5);
+                //find all tasks that match keyword
+                ArrayList<Task> matchingTasks = taskList.findMatchingTasks(keyword);
+                //print all tasks that match keyword
+                ui.printMatchingTasks(matchingTasks);
                 input = sc.nextLine();
             }
         }
-        return tasklist;
+        return taskList;
     }
 
     /**
@@ -184,7 +193,8 @@ public class Parser {
     public boolean checkValidIndex(int index) {
 
         try {
-            if (index < 1 || index > tasklist.getTaskListSize()) {
+            if (index < 1 || index > taskList.getTaskListSize()) {
+
                 throw new IndexOffBoundException();
             }
             return false;
@@ -216,6 +226,8 @@ public class Parser {
             case "todo":
                 break;
             case "done":
+                break;
+            case "find":
                 break;
             default:
                 throw new InvalidCommandException("I'm sorry, but I don't know what that means :-( \n" +

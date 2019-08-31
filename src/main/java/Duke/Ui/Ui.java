@@ -1,6 +1,9 @@
 package Duke.Ui;
 
 import Duke.Task.Task;
+import Duke.Task.TaskList;
+
+import java.util.ArrayList;
 
 /**
  * Represents a User Interface that deals with interactions with the user.
@@ -32,8 +35,11 @@ public class Ui {
     /**
      * Prints the sentence for the task list
      */
-    public void printTaskList() {
+    public void printTaskList(TaskList taskList) {
         System.out.println("Here are the tasks in your list:");
+        for (int i = 1; i <= taskList.getTaskListSize(); i++) {
+            System.out.println("" + i + ". " + taskList.getTask(i - 1));
+        }
     }
 
     /**
@@ -65,5 +71,12 @@ public class Ui {
     public void printTaskAdded(Task task, int taskSize) {
         System.out.println("Got it. I've added this task:\n" + task
                 + "\nNow you have " + taskSize + " tasks in the list");
+    }
+
+    public void printMatchingTasks(ArrayList<Task> matchingTaskList) {
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 1; i <= matchingTaskList.size(); i++) {
+            System.out.println("" + i + ". " + matchingTaskList.get(i - 1));
+        }
     }
 }
