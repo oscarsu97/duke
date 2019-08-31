@@ -11,17 +11,33 @@ import Duke.Ui.Ui;
 
 import java.util.Scanner;
 
+/**
+ * Parser class that deals with making sense of the user command.
+ */
 public class Parser {
     private TaskList tasklist;
     private Scanner sc;
     private Ui ui;
 
+    /**
+     * Initialise Parser class with TaskList and Ui class
+     *
+     * @param taskList list of tasks
+     * @param ui       object that deals with interaction with user
+     */
     public Parser(TaskList taskList, Ui ui) {
         this.tasklist = taskList;
         sc = new Scanner(System.in);
         this.ui = ui;
     }
 
+    /**
+     * Check if the user command input is valid,
+     * otherwise it will prompt user to give a
+     * valid input again.
+     *
+     * @return a list of the updated tasks
+     */
     public TaskList parse() {
         String input = sc.nextLine();
         boolean isTheEnd = false;
@@ -48,12 +64,12 @@ public class Parser {
                 input = sc.nextLine();
             } else if (taskType.equals("done")) {
                 isInComplete = checkIncompleteCommand(input, 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 isInValid = checkValidIndex(Integer.parseInt(taskDetails[1]), tasklist.getTaskSize());
-                if(isInValid){
+                if (isInValid) {
                     input = sc.nextLine();
                     continue;
                 }
@@ -67,12 +83,12 @@ public class Parser {
 
                 String[] msg = input.split("/by");
                 isInComplete = checkIncompleteCommand(msg[0], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 isInComplete = checkIncompleteCommand(msg[1], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
@@ -84,12 +100,12 @@ public class Parser {
 
                 String[] msg = input.split("/at");
                 isInComplete = checkIncompleteCommand(msg[0], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 isInComplete = checkIncompleteCommand(msg[1], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
@@ -110,12 +126,12 @@ public class Parser {
 
             } else if (taskType.equals("delete")) {
                 isInComplete = checkIncompleteCommand(input, 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 isInValid = checkValidIndex(Integer.parseInt(taskDetails[1]), tasklist.getTaskSize());
-                if(isInValid){
+                if (isInValid) {
                     input = sc.nextLine();
                     continue;
                 }
@@ -129,9 +145,16 @@ public class Parser {
         return tasklist;
     }
 
-    private boolean checkIncompleteCommand(String description, int expectedLength) {
+    /**
+     * Check if the command given by the user is of the correct length
+     *
+     * @param command        command given by the user
+     * @param expectedLength expected length of the command
+     * @return false if it is a complete command, true if it is an incomplete command
+     */
+    private boolean checkIncompleteCommand(String command, int expectedLength) {
         try {
-            if (description.split(" ").length < expectedLength) {
+            if (command.split(" ").length < expectedLength) {
                 throw new IncompleteCommandException("The description of the command is incomplete\n" +
                         "Please enter again.");
             }
@@ -142,6 +165,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Check if the index is within the size of the task list
+     *
+     * @param index    index of the task in the task list
+     * @param taskSize size of the task list
+     * @return false if it is within range, true if it is out of range
+     */
     public boolean checkValidIndex(int index, int taskSize) {
         try {
             if (index < 1 || index > tasklist.getTaskSize()) {
@@ -154,6 +184,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Check if the command given by the user is a valid command.
+     *
+     * @param taskType type of the task to be executed
+     * @return false if it is an invalid command, true if it is a valid command.
+     */
     public boolean checkValidCommand(String taskType) {
         try {
             switch (taskType) {

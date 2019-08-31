@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Storage class that deals with loading tasks from the file and saving tasks in the file.
+ */
 public class Storage {
     private String filePath;
     private Scanner sc;
@@ -22,6 +25,12 @@ public class Storage {
         tasks = new ArrayList<>();
     }
 
+    /**
+     * Load the list of tasks from duke.txt file,
+     * if file could not be file, it will tell user
+     * that file could not be found and an empty ArrayList of tasks
+     * @return an ArrayList that contains the tasks to do
+     */
     public ArrayList<Task> load() {
         try {
             sc = new Scanner(new File(filePath));
@@ -32,6 +41,11 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * After loading from the file, this method will
+     * determine the type of task and add them to the
+     * task list.
+     */
     public void readFile() {
         while (sc.hasNext()) {
             String line = sc.nextLine();
@@ -71,6 +85,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Update file with a given format based on the type of Task
+     * in the task list
+     * @param taskList list of tasks
+     */
     public void updateFile(ArrayList<Task> taskList) {
         try {
             FileWriter fileWriter = new FileWriter(filePath, false);
