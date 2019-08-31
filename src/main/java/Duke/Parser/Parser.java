@@ -29,31 +29,31 @@ public class Parser {
         while (!isTheEnd) {
             String[] taskDetails = input.split(" ");
             String taskType = taskDetails[0].trim();
-            boolean isInValid = checkValidCommand(taskType);
-            boolean isInComplete = false;
+            boolean isInvalid = checkValidCommand(taskType);
+            boolean isInComplete;
 
-            if (isInValid) {
-                while (isInValid) {
+            if (isInvalid) {
+                while (isInvalid) {
                     input = sc.nextLine();
                     String[] newTaskDetails = input.split(" ");
                     String newTaskType = newTaskDetails[0].trim();
-                    isInValid = checkValidCommand(newTaskType);
+                    isInvalid = checkValidCommand(newTaskType);
                 }
             }
             if (taskType.equals("list")) {
                 ui.printTaskList();
-                for (int i = 1; i <= tasklist.getTaskSize(); i++) {
+                for (int i = 1; i <= tasklist.getTaskListSize(); i++) {
                     System.out.println("" + i + ". " + tasklist.getTask(i - 1));
                 }
                 input = sc.nextLine();
             } else if (taskType.equals("done")) {
                 isInComplete = checkIncompleteCommand(input, 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
-                isInValid = checkValidIndex(Integer.parseInt(taskDetails[1]), tasklist.getTaskSize());
-                if(isInValid){
+                isInvalid = checkValidIndex(Integer.parseInt(taskDetails[1]));
+                if (isInvalid) {
                     input = sc.nextLine();
                     continue;
                 }
@@ -67,41 +67,50 @@ public class Parser {
 
                 String[] msg = input.split("/by");
                 isInComplete = checkIncompleteCommand(msg[0], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 isInComplete = checkIncompleteCommand(msg[1], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 tasklist.addTask(new Deadline(msg[0].trim().substring(8).trim(), msg[1].trim()));
-                ui.printTaskAdded(tasklist.getTask(tasklist.getTaskSize() - 1), tasklist.getTaskSize());
+
+                int taskListSize = tasklist.getTaskListSize();
+
+                ui.printTaskAdded(tasklist.getTask(taskListSize - 1), taskListSize);
                 input = sc.nextLine();
 
             } else if (taskType.equals("event")) {
 
                 String[] msg = input.split("/at");
                 isInComplete = checkIncompleteCommand(msg[0], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 isInComplete = checkIncompleteCommand(msg[1], 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
                 tasklist.addTask(new Event(msg[0].trim().substring(5).trim(), msg[1].trim()));
-                ui.printTaskAdded(tasklist.getTask(tasklist.getTaskSize() - 1), tasklist.getTaskSize());
+
+                int taskListSize = tasklist.getTaskListSize();
+
+                ui.printTaskAdded(tasklist.getTask(taskListSize - 1), taskListSize);
                 input = sc.nextLine();
 
             } else if (taskType.equals("todo")) {
                 checkIncompleteCommand(input, 2);
                 String toDo = input.substring(5);
                 tasklist.addTask(new ToDo(toDo));
-                ui.printTaskAdded(tasklist.getTask(tasklist.getTaskSize() - 1), tasklist.getTaskSize());
+
+                int taskListSize = tasklist.getTaskListSize();
+
+                ui.printTaskAdded(tasklist.getTask(taskListSize - 1), taskListSize);
                 input = sc.nextLine();
 
             } else if (input.equals("bye")) {
@@ -110,19 +119,20 @@ public class Parser {
 
             } else if (taskType.equals("delete")) {
                 isInComplete = checkIncompleteCommand(input, 2);
-                if(isInComplete){
+                if (isInComplete) {
                     input = sc.nextLine();
                     continue;
                 }
-                isInValid = checkValidIndex(Integer.parseInt(taskDetails[1]), tasklist.getTaskSize());
-                if(isInValid){
+                isInvalid = checkValidIndex(Integer.parseInt(taskDetails[1]));
+                if (isInvalid) {
                     input = sc.nextLine();
                     continue;
                 }
                 int index = Integer.parseInt(taskDetails[1]) - 1;
+                int taskListSize = tasklist.getTaskListSize();
 
-                ui.printRemoveTask(tasklist.getTask(index), tasklist.getTaskSize() - 1);
-                tasklist.deleteList(index);
+                ui.printRemoveTask(tasklist.getTask(index), taskListSize - 1);
+                tasklist.deleteTask(index);
                 input = sc.nextLine();
             }
         }
@@ -142,9 +152,9 @@ public class Parser {
         }
     }
 
-    public boolean checkValidIndex(int index, int taskSize) {
+    public boolean checkValidIndex(int index) {
         try {
-            if (index < 1 || index > tasklist.getTaskSize()) {
+            if (index < 1 || index > tasklist.getTaskListSize()) {
                 throw new IndexOffBoundException();
             }
             return false;

@@ -30,7 +30,7 @@ public class Ui {
                 + "\nNow you have " + taskSize + " tasks in the list.");
     }
 
-    public void printTaskAdded(Task task, int taskSize){
+    public void printTaskAdded(Task task, int taskSize) {
         System.out.println("Got it. I've added this task:\n" + task
                 + "\nNow you have " + taskSize + " tasks in the list");
     }
