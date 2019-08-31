@@ -38,7 +38,7 @@ public class TaskList {
      * Delete a task from the task list
      * @param index the task index in the task list
      */
-    public void deleteList(int index){
+    public void deleteTask(int index){
         taskList.remove(index);
     }
 
@@ -54,7 +54,7 @@ public class TaskList {
      * Returns the size of the list of task
      * @return int value of the size of the list
      */
-    public int getTaskSize(){
+    public int getTaskListSize(){
         return taskList.size();
     }
 
