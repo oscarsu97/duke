@@ -23,7 +23,7 @@ public class Deadline extends Task {
         localDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, min);
     }
 
-    public String getDateTime(){
+    public String getDateTime() {
         return dateTime;
     }
 
