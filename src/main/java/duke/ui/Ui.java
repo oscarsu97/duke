@@ -28,18 +28,20 @@ public class Ui {
     /**
      * Prints the goodbye message.
      */
-    public void showGoodbye() {
-        System.out.println("Bye. Hope to see you again soon!");
+    public String showGoodbye() {
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
      * Prints the sentence for the task list.
      */
-    public void printTaskList(TaskList taskList) {
+    public String printTaskList(TaskList taskList) {
+        String str = "Here are the tasks in your list:\n";
         System.out.println("Here are the tasks in your list:");
         for (int i = 1; i <= taskList.getTaskListSize(); i++) {
-            System.out.println("" + i + ". " + taskList.getTask(i - 1));
+            str += String.format("%s. %s\n,", i, taskList.getTask(i - 1));
         }
+        return str;
     }
 
     /**
@@ -47,8 +49,9 @@ public class Ui {
      *
      * @param task the task that is being marked.
      */
-    public void printMarkedTask(Task task) {
-        System.out.println("Nice! I've marked this task as done:\n" + task);
+    public String printMarkedTask(Task task) {
+        String str = "Nice! I've marked this task as done:\n" + task;
+        return str;
     }
 
     /**
@@ -57,9 +60,10 @@ public class Ui {
      * @param task     the task that is being removed
      * @param taskSize the size of the list after deletion
      */
-    public void printRemoveTask(Task task, int taskSize) {
-        System.out.println("Noted. I've removed this task:\n" + task
-                + "\nNow you have " + taskSize + " tasks in the list.");
+    public String printRemoveTask(Task task, int taskSize) {
+        String str = "Noted. I've removed this task:\n" + task
+                + "\nNow you have " + taskSize + " tasks in the list.";
+        return str;
     }
 
     /**
@@ -68,9 +72,10 @@ public class Ui {
      * @param task     task that is being added
      * @param taskSize size of the list after addition
      */
-    public void printTaskAdded(Task task, int taskSize) {
-        System.out.println("Got it. I've added this task:\n" + task
-                + "\nNow you have " + taskSize + " tasks in the list");
+    public String printTaskAdded(Task task, int taskSize) {
+        String str = "Got it. I've added this task:\n" + task
+                + "\nNow you have " + taskSize + " tasks in the list";
+        return str;
     }
 
     /**
@@ -78,10 +83,11 @@ public class Ui {
      *
      * @param matchingTaskList the list of tasks that is a match
      */
-    public void printMatchingTasks(ArrayList<Task> matchingTaskList) {
-        System.out.println("Here are the matching tasks in your list:");
+    public String printMatchingTasks(ArrayList<Task> matchingTaskList) {
+        String str = "Here are the matching tasks in your list:\n";
         for (int i = 1; i <= matchingTaskList.size(); i++) {
-            System.out.println("" + i + ". " + matchingTaskList.get(i - 1));
+            str += "" + i + ". " + matchingTaskList.get(i - 1);
         }
+        return str;
     }
 }
