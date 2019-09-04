@@ -1,9 +1,7 @@
-import Duke.Parser.Parser;
-import Duke.Storage.Storage;
-import Duke.Task.TaskList;
-import Duke.Ui.Ui;
-
-import java.io.File;
+import duke.parser.Parser;
+import duke.storage.Storage;
+import duke.task.TaskList;
+import duke.ui.Ui;
 
 /**
  * Represents a bot that helps user to keep track of their task list.
@@ -17,7 +15,7 @@ public class Duke {
     private Parser parser;
 
     /**
-     * initialise Duke and load data from Duke.txt file
+     * initialise duke and load data from duke.txt file
      * into a TaskList class.
      * @param filePath file path of duke.txt file
      */
@@ -32,7 +30,7 @@ public class Duke {
      * starts off by greeting user and afterwards,
      * user command is being parsed to check for the validity
      * of the code. At the end of the whole process, it will
-     * update the list of tasks back into Duke.txt file.
+     * update the list of tasks back into duke.txt file.
      */
     public void run() {
         ui.showWelcome();
@@ -42,12 +40,10 @@ public class Duke {
 
     /**
      * main method where the code starts from.
-     * @param args
+     * @param args arguments
      */
     public static void main(String[] args) {
-        File file = new File("data/duke.txt");
-        String path = file.getAbsolutePath();
-        new Duke(path).run();
+        new Duke("data/duke.txt").run();
     }
 }
 

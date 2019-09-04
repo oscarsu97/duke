@@ -1,13 +1,13 @@
  @ECHO OFF
    
    REM create bin directory if it doesn't exist
-   if not exist Duke\bin mkdir Duke\bin
+   if not exist duke\bin mkdir duke\bin
    
    REM delete output from previous run
    del ACTUAL.TXT
    
    REM compile the code into the bin folder
-   javac  -cp Duke\src -Xlint:none -d Duke\bin Duke\src\main\java\Duke.java
+   javac  -cp duke\src -Xlint:none -d duke\bin duke\src\main\java\duke.java
    IF ERRORLEVEL 1 (
        echo ********** BUILD FAILURE **********
        exit /b 1
@@ -15,7 +15,7 @@
    REM no error here, errorlevel == 0
    
    REM run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-   java -classpath Duke\bin Duke < input.txt > ACTUAL.TXT
+   java -classpath duke\bin duke < input.txt > ACTUAL.TXT
    
    REM compare the output to the expected output
    FC ACTUAL.TXT EXPECTED.TXT
@@ -26,9 +26,9 @@
    #!/usr/bin/env bash
    
    # create bin directory if it doesn't exist
-   if [ ! -d "Duke/bin" ]
+   if [ ! -d "duke/bin" ]
    then
-       mkdir Duke/bin
+       mkdir duke/bin
    fi
    
    # delete output from previous run
@@ -38,14 +38,14 @@
    fi
 	
    # compile the code into the bin folder, terminates if error occurred
-   if ! javac -cp Duke/src -Xlint:none -d Duke/bin Duke/src/main/java/Duke.java
+   if ! javac -cp duke/src -Xlint:none -d duke/bin duke/src/main/java/duke.java
    then
        echo "********** BUILD FAILURE **********"
        exit 1
    fi
    
    # run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-   java -classpath Duke/bin Duke < input.txt > ACTUAL.TXT
+   java -classpath duke/bin duke < input.txt > ACTUAL.TXT
    
    # compare the output to the expected output
    diff ACTUAL.TXT EXPECTED.TXT

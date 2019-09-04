@@ -1,9 +1,9 @@
-package Duke.Storage;
+package duke.storage;
 
-import Duke.Task.Deadline;
-import Duke.Task.Event;
-import Duke.Task.Task;
-import Duke.Task.ToDo;
+import duke.task.Deadline;
+import duke.task.Event;
+import duke.task.Task;
+import duke.task.ToDo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Storage class that deals with loading tasks from the file and saving tasks in the file.
+ * storage class that deals with loading tasks from the file and saving tasks in the file.
  */
 public class Storage {
     private String filePath;
@@ -29,6 +29,7 @@ public class Storage {
      * Load the list of tasks from duke.txt file,
      * if file could not be file, it will tell user
      * that file could not be found and an empty ArrayList of tasks
+     *
      * @return an ArrayList that contains the tasks to do
      */
     public ArrayList<Task> load() {
@@ -86,8 +87,9 @@ public class Storage {
     }
 
     /**
-     * Update file with a given format based on the type of Task
+     * Update file with a given format based on the type of task.
      * in the task list
+     *
      * @param taskList list of tasks
      */
     public void updateFile(ArrayList<Task> taskList) {
@@ -103,11 +105,13 @@ public class Storage {
                     fileWriter.write(taskFormat + "\n");
                 }
                 if (task instanceof Deadline) {
-                    taskFormat = String.format("D | %s | %s | %s", done, task.getDescription(), ((Deadline) task).getDateTime());
+                    taskFormat = String.format("D | %s | %s | %s", done, task.getDescription(),
+                            ((Deadline) task).getDateTime());
                     fileWriter.write(taskFormat + "\n");
                 }
                 if (task instanceof Event) {
-                    taskFormat = String.format("E | %s | %s | %s", done, task.getDescription(), ((Event) task).getDateTime());
+                    taskFormat = String.format("E | %s | %s | %s", done, task.getDescription(),
+                            ((Event) task).getDateTime());
                     fileWriter.write(taskFormat + "\n");
                 }
             }

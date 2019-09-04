@@ -1,4 +1,4 @@
-package Duke.DukeException;
+package duke.exception;
 
 /**
  * Exception class that deals with wrong index given by user
@@ -8,10 +8,11 @@ public class IndexOffBoundException extends Exception {
 
     /**
      * Return a string representation of the class.
+     *
      * @return String representation
      */
     @Override
-    public String toString(){
+    public String toString() {
         return "☹ OOPS!!! " + "please enter a valid index";
     }
 }

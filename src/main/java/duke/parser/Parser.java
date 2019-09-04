@@ -1,16 +1,21 @@
-package Duke.Parser;
+package duke.parser;
 
-import Duke.DukeException.IncompleteCommandException;
-import Duke.DukeException.IndexOffBoundException;
-import Duke.DukeException.InvalidCommandException;
-import Duke.Task.*;
-import Duke.Ui.Ui;
+import duke.exception.IncompleteCommandException;
+import duke.exception.IndexOffBoundException;
+import duke.exception.InvalidCommandException;
+import duke.task.Deadline;
+import duke.task.Event;
+import duke.task.Task;
+import duke.task.TaskList;
+import duke.task.ToDo;
+
+import duke.ui.Ui;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Parser class that deals with making sense of the user command.
+ * parser class that deals with making sense of the user command.
  */
 public class Parser {
     private TaskList taskList;
@@ -18,7 +23,7 @@ public class Parser {
     private Ui ui;
 
     /**
-     * Initialise Parser class with TaskList and Ui class
+     * Initialise parser class with TaskList and ui class.
      *
      * @param taskList list of tasks
      * @param ui       object that deals with interaction with user
@@ -165,7 +170,7 @@ public class Parser {
     }
 
     /**
-     * Check if the command given by the user is of the correct length
+     * Check if the command given by the user is of the correct length.
      *
      * @param command        command given by the user
      * @param expectedLength expected length of the command
@@ -174,8 +179,8 @@ public class Parser {
     private boolean checkIncompleteCommand(String command, int expectedLength) {
         try {
             if (command.split(" ").length < expectedLength) {
-                throw new IncompleteCommandException("The description of the command is incomplete\n" +
-                        "Please enter again.");
+                throw new IncompleteCommandException("The description of the command is incomplete\n"
+                        + "Please enter again.");
             }
             return false;
         } catch (IncompleteCommandException e) {
@@ -185,7 +190,7 @@ public class Parser {
     }
 
     /**
-     * Check if the index is within the size of the task list
+     * Check if the index is within the size of the task list.
      *
      * @param index index of the task in the task list
      * @return false if it is within range, true if it is out of range
@@ -230,8 +235,8 @@ public class Parser {
             case "find":
                 break;
             default:
-                throw new InvalidCommandException("I'm sorry, but I don't know what that means :-( \n" +
-                        "Enter a command again:");
+                throw new InvalidCommandException("I'm sorry, but I don't know what that means :-( \n"
+                        + "Enter a command again:");
             }
             return false;
         } catch (InvalidCommandException e) {

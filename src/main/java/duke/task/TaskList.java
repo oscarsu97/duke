@@ -1,9 +1,9 @@
-package Duke.Task;
+package duke.task;
 
 import java.util.ArrayList;
 
 /**
- * Represent a list of tasks that needs to be do
+ * Represents a list of tasks that needs to be do
  * and this class is able to add or delete tasks
  * in the list.
  */
@@ -28,7 +28,7 @@ public class TaskList {
     }
 
     /**
-     * Add a new task into the task list
+     * Add a new task into the task list.
      *
      * @param task task to be added
      */
@@ -37,7 +37,7 @@ public class TaskList {
     }
 
     /**
-     * Delete a task from the task list
+     * Delete a task from the task list.
      *
      * @param index the task index in the task list
      */
@@ -46,7 +46,7 @@ public class TaskList {
     }
 
     /**
-     * Returns the list of the task
+     * Returns the list of the task.
      *
      * @return list of task
      */
@@ -55,7 +55,7 @@ public class TaskList {
     }
 
     /**
-     * Returns the size of the list of task
+     * Returns the size of the list of task.
      *
      * @return int value of the size of the list
      */
@@ -64,7 +64,7 @@ public class TaskList {
     }
 
     /**
-     * Get a specified task from the list
+     * Get a specified task from the list.
      *
      * @param index the index of the task in the task list
      * @return the specified task
@@ -74,7 +74,7 @@ public class TaskList {
     }
 
     /**
-     * Find task that matches the keyword
+     * Find task that matches the keyword.
      *
      * @param keyword the string to look for
      * @return ArrayList that contain all tasks that match the keyword

@@ -1,4 +1,4 @@
-package Duke.Task;
+package duke.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,9 +12,10 @@ public class Event extends Task {
     private String dateTime;
 
     /**
-     * initialise Event task with description of task and the date and time to be completed
+     * Initialise Event task with description of task and the date and time to be completed.
+     *
      * @param description description of task
-     * @param dateTime date and time to be completed
+     * @param dateTime    date and time to be completed
      */
     public Event(String description, String dateTime) {
         super(description);
@@ -32,15 +33,17 @@ public class Event extends Task {
     }
 
     /**
-     * get the date and time of the task
+     * Get the date and time of the task.
+     *
      * @return date and time to be completed
      */
-    public String getDateTime(){
+    public String getDateTime() {
         return dateTime;
     }
 
     /**
-     * String representation of Deadline task
+     * String representation of Deadline task.
+     *
      * @return string representation
      */
     @Override
