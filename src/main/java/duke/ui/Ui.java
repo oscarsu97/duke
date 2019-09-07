@@ -37,9 +37,8 @@ public class Ui {
      */
     public String printTaskList(TaskList taskList) {
         String str = "Here are the tasks in your list:\n";
-        System.out.println("Here are the tasks in your list:");
         for (int i = 1; i <= taskList.getTaskListSize(); i++) {
-            str += String.format("%s. %s\n,", i, taskList.getTask(i - 1));
+            str += String.format("%s. %s\n", i, taskList.getTask(i - 1));
         }
         return str;
     }
@@ -60,7 +59,7 @@ public class Ui {
      * @param task     the task that is being removed
      * @param taskSize the size of the list after deletion
      */
-    public String printRemoveTask(Task task, int taskSize) {
+    public String printDeletedTask(Task task, int taskSize) {
         String str = "Noted. I've removed this task:\n" + task
                 + "\nNow you have " + taskSize + " tasks in the list.";
         return str;
@@ -86,7 +85,7 @@ public class Ui {
     public String printMatchingTasks(ArrayList<Task> matchingTaskList) {
         String str = "Here are the matching tasks in your list:\n";
         for (int i = 1; i <= matchingTaskList.size(); i++) {
-            str += "" + i + ". " + matchingTaskList.get(i - 1);
+            str += String.format("%s. %s\n", i, matchingTaskList.get(i - 1));
         }
         return str;
     }
