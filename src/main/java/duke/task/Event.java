@@ -38,6 +38,7 @@ public class Event extends Task {
      * @return date and time to be completed
      */
     public String getDateTime() {
+        assert dateTime != null : "dateTime is not initialised";
         return dateTime;
     }
 
