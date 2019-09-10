@@ -19,7 +19,7 @@ public class Duke {
     private Scanner sc;
 
     /**
-     * initialise duke and load data from duke.txt file
+     * Initialise duke and load data from duke.txt file
      * into a TaskList class.
      */
     public Duke() {
@@ -31,7 +31,7 @@ public class Duke {
     }
 
     /**
-     * starts off by greeting user and afterwards,
+     * Starts off by greeting user and afterwards,
      * user command is being parsed to check for the validity
      * of the code. At the end of the whole process, it will
      * update the list of tasks back into duke.txt file.
@@ -53,7 +53,7 @@ public class Duke {
 
 
     /**
-     * main method where the code starts from.
+     * Main method where the code starts from.
      *
      * @param args arguments
      */

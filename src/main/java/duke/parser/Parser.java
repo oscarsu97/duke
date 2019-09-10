@@ -164,10 +164,10 @@ public class Parser {
 
             //print all tasks that match keyword
             return ui.printMatchingTasks(matchingTasks);
+        } else {
+            return "I'm sorry, but I don't know what that means :-( \n"
+                    + "Enter a command again:";
         }
-
-        return "I'm sorry, but I don't know what that means :-( \n"
-                + "Enter a command again:";
     }
 
 
@@ -179,6 +179,7 @@ public class Parser {
      * @return false if it is a complete command, true if it is an incomplete command
      */
     private String checkIncompleteCommand(String command, int expectedLength) {
+        assert expectedLength < 0 : "Expected length should not be negative";
         try {
             if (command.split(" ").length < expectedLength) {
                 throw new IncompleteCommandException("The description of the command is incomplete\n"
@@ -198,6 +199,7 @@ public class Parser {
      * @return false if it is a complete command, true if it is an incomplete command
      */
     private String checkIncompleteCommand(int commandLength, int expectedLength) {
+        assert expectedLength < 0 : "Expected length should not be negative";
         try {
             if (commandLength < expectedLength) {
                 throw new IncompleteCommandException("The description of the command is incomplete\n"
@@ -217,7 +219,6 @@ public class Parser {
      * @return false if it is within range, true if it is out of range
      */
     public String checkValidIndex(int index) {
-
         try {
             if (index < 1 || index > taskList.getTaskListSize()) {
                 throw new IndexOffBoundException();
