@@ -54,88 +54,53 @@ public class Parser {
         }
 
         //Executing command based on command type
-        if (taskType.equals("list")) {
-
+        switch (taskType) {
+        case "list":
             return ui.printTaskList(taskList);
 
-        } else if (taskType.equals("done")) {
-
-            error = checkIncompleteCommand(input, 2);
-            if (!error.equals("")) {
-                return error;
-            }
-            error = checkValidIndex(Integer.parseInt(taskDetails[1]));
-            if (!error.equals("")) {
-                return error;
-            }
-            int index = Integer.parseInt(taskDetails[1]) - 1;
-            taskList.getTask(index).markAsDone();
-
-            return ui.printMarkedTask(taskList.getTask(index));
-
-        } else if (taskType.equals("deadline")) {
-
-            String[] msg = input.split("/by");
+        case "deadline":
+            String[] deadlineDetails = input.split("/by");
             // check whether deadline command is complete
-            error = checkIncompleteCommand(msg.length, 2);
+            error = checkIncompleteCommand(deadlineDetails.length, 2);
             if (!error.equals("")) {
                 return error;
             }
             // Checks whether task description is complete
-            error = checkIncompleteCommand(msg[0], 2);
+            error = checkIncompleteCommand(deadlineDetails[0], 2);
             if (!error.equals("")) {
                 return error;
             }
             //Checks whether there is date and time input
-            error = checkIncompleteCommand(msg[1], 2);
+            error = checkIncompleteCommand(deadlineDetails[1], 2);
             if (!error.equals("")) {
                 return error;
             }
-            taskList.addTask(new Deadline(msg[0].trim().substring(8).trim(), msg[1].trim()));
-            int taskListSize = taskList.getTaskListSize();
+            taskList.addTask(new Deadline(deadlineDetails[0].trim().substring(8).trim(), deadlineDetails[1].trim()));
 
-            return ui.printTaskAdded(taskList.getTask(taskListSize - 1), taskListSize);
+            return ui.printTaskAdded(taskList);
 
-        } else if (taskType.equals("event")) {
-
-            String[] msg = input.split("/at");
+        case "event":
+            String[] eventDetails = input.split("/at");
             // check whether event command is complete
-            error = checkIncompleteCommand(msg.length, 2);
+            error = checkIncompleteCommand(eventDetails.length, 2);
             if (!error.equals("")) {
                 return error;
             }
             //Check whether the task description is complete
-            error = checkIncompleteCommand(msg[0], 2);
+            error = checkIncompleteCommand(eventDetails[0], 2);
             if (!error.equals("")) {
                 return error;
             }
             // Check whether date and time format is complete
-            error = checkIncompleteCommand(msg[1], 2);
+            error = checkIncompleteCommand(eventDetails[1], 2);
             if (!error.equals("")) {
                 return error;
             }
-            taskList.addTask(new Event(msg[0].trim().substring(5).trim(), msg[1].trim()));
+            taskList.addTask(new Event(eventDetails[0].trim().substring(5).trim(), eventDetails[1].trim()));
 
-            int taskListSize = taskList.getTaskListSize();
+            return ui.printTaskAdded(taskList);
 
-            return ui.printTaskAdded(taskList.getTask(taskListSize - 1), taskListSize);
-
-        } else if (taskType.equals("todo")) {
-            error = checkIncompleteCommand(input, 2);
-            if (!error.equals("")) {
-                return error;
-            }
-            String toDo = input.substring(5);
-            taskList.addTask(new ToDo(toDo));
-            int taskListSize = taskList.getTaskListSize();
-
-            return ui.printTaskAdded(taskList.getTask(taskListSize - 1), taskListSize);
-
-        } else if (input.equals("bye")) {
-            storage.updateFile(taskList.getTaskList());
-            return ui.showGoodbye();
-
-        } else if (taskType.equals("delete")) {
+        case "delete":
             error = checkIncompleteCommand(input, 2);
             if (!error.equals("")) {
                 return error;
@@ -151,7 +116,35 @@ public class Parser {
 
             return ui.printDeletedTask(taskToDelete, taskListSize);
 
-        } else if (taskType.equals("find")) {
+        case "bye":
+            storage.updateFile(taskList.getTaskList());
+            return ui.showGoodbye();
+
+        case "todo":
+            error = checkIncompleteCommand(input, 2);
+            if (!error.equals("")) {
+                return error;
+            }
+            String toDo = input.substring(5);
+            taskList.addTask(new ToDo(toDo));
+
+            return ui.printTaskAdded(taskList);
+
+        case "done":
+            error = checkIncompleteCommand(input, 2);
+            if (!error.equals("")) {
+                return error;
+            }
+            error = checkValidIndex(Integer.parseInt(taskDetails[1]));
+            if (!error.equals("")) {
+                return error;
+            }
+            int reference = Integer.parseInt(taskDetails[1]) - 1;
+            taskList.getTask(reference).markAsDone();
+
+            return ui.printMarkedTask(taskList.getTask(reference));
+
+        case "find":
             error = checkIncompleteCommand(input, 2);
 
             if (!error.equals("")) {
@@ -164,7 +157,8 @@ public class Parser {
 
             //print all tasks that match keyword
             return ui.printMatchingTasks(matchingTasks);
-        } else {
+
+        default:
             return "I'm sorry, but I don't know what that means :-( \n"
                     + "Enter a command again:";
         }
@@ -179,7 +173,7 @@ public class Parser {
      * @return false if it is a complete command, true if it is an incomplete command
      */
     private String checkIncompleteCommand(String command, int expectedLength) {
-        assert expectedLength < 0 : "Expected length should not be negative";
+        assert expectedLength > 0 : "Expected length should not be negative";
         try {
             if (command.split(" ").length < expectedLength) {
                 throw new IncompleteCommandException("The description of the command is incomplete\n"
@@ -194,12 +188,12 @@ public class Parser {
     /**
      * Check if the command given by the user is of the correct length.
      *
-     * @param commandLength length of given by the user
+     * @param commandLength  length of given by the user
      * @param expectedLength expected length of the command
      * @return false if it is a complete command, true if it is an incomplete command
      */
     private String checkIncompleteCommand(int commandLength, int expectedLength) {
-        assert expectedLength < 0 : "Expected length should not be negative";
+        assert expectedLength > 0 : "Expected length should not be negative";
         try {
             if (commandLength < expectedLength) {
                 throw new IncompleteCommandException("The description of the command is incomplete\n"
