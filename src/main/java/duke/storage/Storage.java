@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -52,6 +53,9 @@ public class Storage {
             String line = sc.nextLine();
             String[] taskDetails = line.split("[|]");
             String taskType = taskDetails[0].trim();
+            String taskDescription;
+            String dateTime;
+            LocalDateTime localDateTime;
             boolean isDone = false;
             if (taskDetails[1].trim().equals("1")) {
                 isDone = true;
@@ -66,14 +70,20 @@ public class Storage {
                 tasks.add(toDoTask);
                 break;
             case "D":
-                Task deadlineTask = new Deadline(taskDetails[2].trim(), taskDetails[3].trim());
+                taskDescription = taskDetails[2].trim();
+                dateTime = taskDetails[3].trim();
+                localDateTime = readLocalDateTime(dateTime);
+                Task deadlineTask = new Deadline(taskDescription, localDateTime, dateTime);
                 if (isDone) {
                     deadlineTask.markAsDone();
                 }
                 tasks.add(deadlineTask);
                 break;
             case "E":
-                Task eventTask = new Event(taskDetails[2].trim(), taskDetails[3].trim());
+                taskDescription = taskDetails[2].trim();
+                dateTime = taskDetails[3].trim();
+                localDateTime = readLocalDateTime(dateTime);
+                Task eventTask = new Event(taskDescription, localDateTime, dateTime);
                 if (isDone) {
                     eventTask.markAsDone();
                 }
@@ -119,5 +129,25 @@ public class Storage {
         } catch (IOException e) {
             System.out.println("file not found");
         }
+    }
+
+    /**
+     * Convert string value of date and time
+     * into LocalDateTime format.
+     *
+     * @param dateTime string representing the date and time
+     * @return LocalDateTime format of the date and time
+     */
+    private LocalDateTime readLocalDateTime(String dateTime) {
+        String[] dateAndTime = dateTime.split(" ");
+        String[] date = dateAndTime[0].split("/");
+        int time = Integer.parseInt(dateAndTime[1]);
+        int dayOfMonth = Integer.parseInt(date[0]);
+        int month = Integer.parseInt(date[1]);
+        int year = Integer.parseInt(date[2]);
+        int hour = time / 100;
+        int min = time % 100;
+
+        return LocalDateTime.of(year, month, dayOfMonth, hour, min);
     }
 }

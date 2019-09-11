@@ -1,14 +1,14 @@
 package duke.task;
 
 /**
- * Represents a task class that needs to be done.
+ * Represents a Task class that needs to be done.
  */
 public abstract class Task {
     protected String description;
     protected boolean isDone;
 
     /**
-     * Initialise task class with description of the task.
+     * Initialise Task class with description of the task.
      *
      * @param description task description
      */
