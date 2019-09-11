@@ -35,7 +35,7 @@ shadowJar {
 
 application {
     // Change this to your main class.
-    mainClassName = "Duke"
+    mainClassName = "Launcher"
 }
 
 javafx {
@@ -44,5 +44,6 @@ javafx {
 }
 
 run {
+    enableAssertions = true
     standardInput = System.in
 }

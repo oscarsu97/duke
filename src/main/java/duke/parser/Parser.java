@@ -1,21 +1,16 @@
 package duke.parser;
 
+import duke.command.*;
 import duke.exception.IncompleteCommandException;
 import duke.exception.IndexOffBoundException;
 import duke.exception.InvalidCommandException;
 import duke.storage.Storage;
-import duke.task.Deadline;
-import duke.task.Event;
-import duke.task.Task;
 import duke.task.TaskList;
-import duke.task.ToDo;
 
 import duke.ui.Ui;
 
-import java.util.ArrayList;
-
 /**
- * parser class that deals with making sense of the user command.
+ * Parser class that deals with making sense of the user command.
  */
 public class Parser {
     private TaskList taskList;
@@ -43,125 +38,183 @@ public class Parser {
      */
     public String parse(String input) {
 
-        String[] taskDetails = input.split(" ");
-        String taskType = taskDetails[0].trim();
+        String message = handleWrongUserInput(input);
 
-        String[] newTaskDetails = input.split(" ");
-        String newTaskType = newTaskDetails[0].trim();
-        String error = checkValidCommand(newTaskType);
-        if (!error.equals("")) {
-            return error;
+        if (hasError(message)) {
+            return message;
+        } else {
+            String[] taskDetails = input.split(" ");
+            String command = taskDetails[0].trim();
+            String response;
+
+            //Executing command based on command type
+            switch (command) {
+            case "list":
+
+                Command list = new ListCommand();
+                response = ((ListCommand) list).execute(taskList, ui);
+                return response;
+
+            case "todo":
+
+                Command todo = new AddCommand();
+                response = ((AddCommand) todo).execute(input, command, taskList, ui);
+                return response;
+
+            case "deadline":
+
+                Command deadline = new AddCommand();
+                response = ((AddCommand) deadline).execute(input, command, taskList, ui);
+                return response;
+
+            case "event":
+
+                Command event = new AddCommand();
+                response = ((AddCommand) event).execute(input, command, taskList, ui);
+                return response;
+
+            case "delete":
+
+                Command delete = new DeleteCommand();
+                response = ((DeleteCommand) delete).execute(taskDetails, taskList, ui);
+                return response;
+
+            case "done":
+
+                Command done = new DoneCommand();
+                response = ((DoneCommand) done).execute(taskDetails, taskList, ui);
+                return response;
+
+            case "find":
+
+                Command find = new FindCommand();
+                response = ((FindCommand) find).execute(taskList, input, ui);
+                return response;
+
+            case "bye":
+
+                Command bye = new ByeCommand();
+                response = ((ByeCommand) bye).execute(ui, storage, taskList);
+                return response;
+
+            default:
+                assert false;
+                // code will not come here given that we have checked that it is a valid command
+                return "I'm sorry, but I don't know what that means :-( \n"
+                        + "Enter a command again:";
+            }
+        }
+    }
+
+    /**
+     * Handle possible error in the input given by the user.
+     *
+     * @param input input given by the user
+     * @return error string if there exists
+     */
+    private String handleWrongUserInput(String input) {
+        String[] taskDetails = input.split(" ");
+        String command = taskDetails[0].trim();
+        String message = "";
+        String taskDescription;
+
+        try {
+            boolean isValidCommand = checkValidCommand(command);
+            if (!isValidCommand) {
+                throw new InvalidCommandException("I'm sorry, but I don't know what that means :-( \n"
+                        + "Enter a command again:");
+            }
+        } catch (InvalidCommandException error) {
+            return error.toString();
         }
 
-        //Executing command based on command type
-        switch (taskType) {
-        case "list":
-            return ui.printTaskList(taskList);
-
+        switch (command) {
         case "deadline":
             String[] deadlineDetails = input.split("/by");
+            taskDescription = deadlineDetails[0];
             // check whether deadline command is complete
-            error = checkIncompleteCommand(deadlineDetails.length, 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(deadlineDetails.length, 2);
+            if (hasError(message)) {
+                return message;
             }
-            // Checks whether task description is complete
-            error = checkIncompleteCommand(deadlineDetails[0], 2);
-            if (!error.equals("")) {
-                return error;
+            // Checks whether deadline task description is complete
+            message = checkIncompleteCommand(taskDescription, 2);
+            if (hasError(message)) {
+                return message;
             }
             //Checks whether there is date and time input
-            error = checkIncompleteCommand(deadlineDetails[1], 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(deadlineDetails[1], 2);
+            if (hasError(message)) {
+                return message;
+            } else {
+                return message;
             }
-            taskList.addTask(new Deadline(deadlineDetails[0].trim().substring(8).trim(), deadlineDetails[1].trim()));
-
-            return ui.printTaskAdded(taskList);
-
         case "event":
             String[] eventDetails = input.split("/at");
             // check whether event command is complete
-            error = checkIncompleteCommand(eventDetails.length, 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(eventDetails.length, 2);
+            if (hasError(message)) {
+                return message;
             }
             //Check whether the task description is complete
-            error = checkIncompleteCommand(eventDetails[0], 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(eventDetails[0], 2);
+            if (hasError(message)) {
+                return message;
             }
             // Check whether date and time format is complete
-            error = checkIncompleteCommand(eventDetails[1], 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(eventDetails[1], 2);
+            if (hasError(message)) {
+                return message;
             }
-            taskList.addTask(new Event(eventDetails[0].trim().substring(5).trim(), eventDetails[1].trim()));
-
-            return ui.printTaskAdded(taskList);
-
+            break;
         case "delete":
-            error = checkIncompleteCommand(input, 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(input, 2);
+            if (hasError(message)) {
+                return message;
             }
-            error = checkValidIndex(Integer.parseInt(taskDetails[1]));
-            if (!error.equals("")) {
-                return error;
+            //check whether the task to be deleted is within the task list
+            message = checkValidIndex(Integer.parseInt(taskDetails[1]));
+            if (hasError(message)) {
+                return message;
             }
-            int index = Integer.parseInt(taskDetails[1]) - 1;
-            Task taskToDelete = taskList.getTask(index);
-            taskList.deleteTask(index);
-            int taskListSize = taskList.getTaskListSize();
-
-            return ui.printDeletedTask(taskToDelete, taskListSize);
-
-        case "bye":
-            storage.updateFile(taskList.getTaskList());
-            return ui.showGoodbye();
-
+            break;
         case "todo":
-            error = checkIncompleteCommand(input, 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(input, 2);
+            if (hasError(message)) {
+                return message;
             }
-            String toDo = input.substring(5);
-            taskList.addTask(new ToDo(toDo));
-
-            return ui.printTaskAdded(taskList);
-
+            break;
         case "done":
-            error = checkIncompleteCommand(input, 2);
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(input, 2);
+            if (hasError(message)) {
+                return message;
             }
-            error = checkValidIndex(Integer.parseInt(taskDetails[1]));
-            if (!error.equals("")) {
-                return error;
+            //check whether the task to be marked done is within task list
+            message = checkValidIndex(Integer.parseInt(taskDetails[1]));
+            if (hasError(message)) {
+                return message;
             }
-            int reference = Integer.parseInt(taskDetails[1]) - 1;
-            taskList.getTask(reference).markAsDone();
-
-            return ui.printMarkedTask(taskList.getTask(reference));
-
+            break;
         case "find":
-            error = checkIncompleteCommand(input, 2);
-
-            if (!error.equals("")) {
-                return error;
+            message = checkIncompleteCommand(input, 2);
+            if (hasError(message)) {
+                return message;
             }
-            String keyword = input.substring(5);
-
-            //find all tasks that match keyword
-            ArrayList<Task> matchingTasks = taskList.findMatchingTasks(keyword);
-
-            //print all tasks that match keyword
-            return ui.printMatchingTasks(matchingTasks);
-
+            break;
         default:
-            return "I'm sorry, but I don't know what that means :-( \n"
-                    + "Enter a command again:";
+            // will not reach here given that we have check that input has a valid command
         }
+        return message;
+    }
+
+    /**
+     * Check if the message contains error message.
+     *
+     * @param message the message describing the error if any
+     * @return a boolean variable depending on the existence of error message
+     */
+    private boolean hasError(String message) {
+        return !message.equals("");
     }
 
 
@@ -226,35 +279,32 @@ public class Parser {
     /**
      * Check if the command given by the user is a valid command.
      *
-     * @param taskType type of the task to be executed
+     * @param command type of the task to be executed
      * @return false if it is an invalid command, true if it is a valid command.
      */
-    public String checkValidCommand(String taskType) {
-        try {
-            switch (taskType) {
-            case "list":
-                break;
-            case "deadline":
-                break;
-            case "event":
-                break;
-            case "delete":
-                break;
-            case "bye":
-                break;
-            case "todo":
-                break;
-            case "done":
-                break;
-            case "find":
-                break;
-            default:
-                throw new InvalidCommandException("I'm sorry, but I don't know what that means :-( \n"
-                        + "Enter a command again:");
-            }
-            return "";
-        } catch (InvalidCommandException e) {
-            return e.toString();
+    public boolean checkValidCommand(String command) {
+
+        switch (command) {
+        case "list":
+            break;
+        case "deadline":
+            break;
+        case "event":
+            break;
+        case "delete":
+            break;
+        case "bye":
+            break;
+        case "todo":
+            break;
+        case "done":
+            break;
+        case "find":
+            break;
+        default:
+            return false;
         }
+        return true;
     }
+
 }

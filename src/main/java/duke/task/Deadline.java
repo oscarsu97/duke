@@ -14,22 +14,13 @@ public class Deadline extends Task {
     /**
      * Initialise Deadline task with description of task and the date and time to be completed.
      *
-     * @param description description of task
-     * @param dateTime    date and time to be completed
+     * @param description   description of task
+     * @param localDateTime date and time to be completed
      */
-    public Deadline(String description, String dateTime) {
+    public Deadline(String description, LocalDateTime localDateTime, String dateTime) {
         super(description);
+        this.localDateTime = localDateTime;
         this.dateTime = dateTime;
-        String[] dateAndTime = dateTime.split(" ");
-        String[] date = dateAndTime[0].split("/");
-        int time = Integer.parseInt(dateAndTime[1]);
-        int dayOfMonth = Integer.parseInt(date[0]);
-        int month = Integer.parseInt(date[1]);
-        int year = Integer.parseInt(date[2]);
-        int hour = time / 100;
-        int min = time % 100;
-
-        localDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, min);
     }
 
     /**

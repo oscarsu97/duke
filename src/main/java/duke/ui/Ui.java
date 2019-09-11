@@ -66,10 +66,10 @@ public class Ui {
     }
 
     /**
-     * Prints the task being added message.
+     * print the task message to show to the user
      *
-     * @param task     task that is being added
-     * @param taskSize size of the list after addition
+     * @param taskList the task list that store all the tasks
+     * @return the string message
      */
     public String printTaskAdded(TaskList taskList) {
         int taskListSize = taskList.getTaskListSize();
