@@ -73,6 +73,10 @@ public class TaskList {
         return taskList.get(index);
     }
 
+    public void setTaskList(ArrayList<Task> taskList) {
+        this.taskList = taskList;
+    }
+
     /**
      * Find task that matches the keyword.
      *
