@@ -4,6 +4,7 @@ import duke.command.*;
 import duke.exception.IncompleteCommandException;
 import duke.exception.IndexOffBoundException;
 import duke.exception.InvalidCommandException;
+import duke.statistic.Statistic;
 import duke.storage.Storage;
 import duke.task.TaskList;
 
@@ -95,6 +96,11 @@ public class Parser {
 
                 Command bye = new ByeCommand();
                 response = ((ByeCommand) bye).execute(ui, storage, taskList);
+                return response;
+
+            case "statistics":
+                Statistic statistic = new Statistic();
+                response = statistic.getStats(taskList);
                 return response;
 
             default:
@@ -300,6 +306,8 @@ public class Parser {
         case "done":
             break;
         case "find":
+            break;
+        case "statistics":
             break;
         default:
             return false;
