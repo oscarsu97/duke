@@ -1,16 +1,16 @@
 package duke.task;
 
 /**
- * Represents a Task class that needs to be done.
+ * Represents a Task class that needs to be completed.
  */
 public abstract class Task {
     protected String description;
     protected boolean isDone;
 
     /**
-     * Initialise Task class with description of the task.
+     * Initialises Task class with description of the task.
      *
-     * @param description task description
+     * @param description description of the task to be done
      */
     public Task(String description) {
         this.description = description;
@@ -18,7 +18,7 @@ public abstract class Task {
     }
 
     /**
-     * Get the status icon  that represents whether the task is completed.
+     * Gets the status icon that represents whether the task is completed.
      *
      * @return status icon
      */
@@ -27,25 +27,19 @@ public abstract class Task {
     }
 
     /**
-     * Set the task to be completed.
+     * Sets the task to be completed.
      */
     public void markAsDone() {
         this.isDone = true;
     }
 
-    /**
-     * Get the description of the task.
-     *
-     * @return
-     */
+
     public String getDescription() {
         return description;
     }
 
     /**
      * Return a boolean value that shows whether the task is completed.
-     *
-     * @return true if task is completed, false if task is incomplete.
      */
     public boolean isDone() {
         return isDone;

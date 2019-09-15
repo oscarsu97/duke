@@ -1,32 +1,30 @@
 package duke.command;
 
+import duke.storage.Storage;
 import duke.task.Task;
 import duke.task.TaskList;
 import duke.ui.Ui;
 
 /**
- * DeleteCommand that deals with "delete" command.
+ * DeleteCommand that handles the deletion of task from task list.
  */
 public class DeleteCommand extends Command {
 
-    /**
-     * Initialises DeleteCommand class.
-     */
-    public DeleteCommand() {
-        super();
+    private int index;
+
+    public DeleteCommand(int index) {
+        this.index = index;
     }
 
     /**
-     * Delete the specified task from the task list
-     * @param taskDetails details of the specified task
+     * Deletes the specified task from the task list.
+     *
      * @param taskList list of tasks
-     * @param ui Ui task that deals with interaction with the user
+     * @param ui       Ui task that deals with interaction with the user
      * @return string representing the deleted task message
      */
-    public String execute(String[] taskDetails, TaskList taskList, Ui ui) {
-        int index = Integer.parseInt(taskDetails[1]) - 1;
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
         Task taskToDelete = taskList.getTask(index);
-
         taskList.deleteTask(index);
         int taskListSize = taskList.getTaskListSize();
         return ui.printDeletedTask(taskToDelete, taskListSize);

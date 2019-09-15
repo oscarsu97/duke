@@ -4,33 +4,31 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represent a deadline task that need to be done before a specific date/time.
+ * Represents a Deadline task that needs to be done before a specific date/time.
  */
 public class Deadline extends Task {
     private LocalDateTime localDateTime;
     private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/YYYY HHmm");
-    private String dateTime;
 
     /**
-     * Initialise Deadline task with description of task and the date and time to be completed.
+     * Initialises Deadline task with description of task and the date and time to be completed.
      *
      * @param description   description of task
      * @param localDateTime date and time to be completed
      */
-    public Deadline(String description, LocalDateTime localDateTime, String dateTime) {
+    public Deadline(String description, LocalDateTime localDateTime) {
         super(description);
         this.localDateTime = localDateTime;
-        this.dateTime = dateTime;
     }
 
     /**
-     * Get the date and time of the task.
+     * Gets the date and time of the task in string.
      *
-     * @return date and time to be completed
+     * @return date and time to be completed in string
      */
     public String getDateTime() {
-        assert dateTime != null : "dateTime is not initialised";
-        return dateTime;
+        assert localDateTime != null : "dateTime is not initialised";
+        return localDateTime.format(dateTimeFormat);
     }
 
     /**

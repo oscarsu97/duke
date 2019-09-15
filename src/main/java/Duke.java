@@ -1,3 +1,5 @@
+import duke.command.Command;
+import duke.exception.DukeException;
 import duke.parser.Parser;
 import duke.storage.Storage;
 import duke.task.TaskList;
@@ -7,8 +9,8 @@ import java.util.Scanner;
 
 
 /**
- * Represents a bot that helps user to keep track of their task list.
- * It execute task according to the user's input command.
+ * Represents a chat bot that helps user to manage their task list.
+ * It executes according to the command given by user's input.
  */
 public class Duke {
 
@@ -19,50 +21,59 @@ public class Duke {
     private Scanner sc;
 
     /**
-     * Initialise duke and load data from duke.txt file
+     * Initialises Duke class and loads the task list from storage file
      * into a TaskList class.
      */
     public Duke() {
         ui = new Ui();
         storage = new Storage("data/duke.txt");
-        taskList = new TaskList(storage.load());
-        parser = new Parser(taskList, ui, storage);
+        try {
+            taskList = new TaskList(storage.load());
+        } catch (DukeException e) {
+            System.out.println(e.getMessage());
+        }
+        parser = new Parser(taskList);
         sc = new Scanner(System.in);
     }
 
     /**
-     * Starts off by greeting user and afterwards,
-     * user command is being parsed to check for the validity
-     * of the code. At the end of the whole process, it will
-     * update the list of tasks back into duke.txt file.
+     * Prints welcome message, reads input from user
+     * and executes it, until the loop exits.
      */
     public void run() {
         ui.showWelcome();
-        boolean isBye = false;
-        String input = sc.nextLine();
-        while (!isBye) {
-            if (input.startsWith("bye")) {
-                System.out.println(parser.parse(input));
-                isBye = true;
-            } else {
-                System.out.println(parser.parse(input));
-                input = sc.nextLine();
+        boolean isExit = false;
+        while (!isExit) {
+            try {
+                String input = sc.nextLine();
+                Command c = parser.parse(input);
+                System.out.println(c.execute(taskList, ui, storage));
+                isExit = c.isExit();
+            } catch (DukeException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
 
 
-    /**
-     * Main method where the code starts from.
-     *
-     * @param args arguments
-     */
     public static void main(String[] args) {
         new Duke().run();
     }
 
+    /**
+     * Parse the input given by user and execute the command
+     * specific to command given.
+     *
+     * @param input input entered into the dialog by the user
+     * @return string representing the response for the user
+     */
     public String getResponse(String input) {
-        return parser.parse(input);
+        try {
+            Command c = parser.parse(input);
+            return c.execute(taskList, ui, storage);
+        } catch (DukeException e) {
+            return e.getMessage();
+        }
     }
 }
 

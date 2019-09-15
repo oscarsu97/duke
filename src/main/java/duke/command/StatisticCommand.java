@@ -1,30 +1,34 @@
-package duke.statistic;
+package duke.command;
 
-import duke.task.*;
+import duke.storage.Storage;
+import duke.task.Deadline;
+import duke.task.Event;
+import duke.task.ToDo;
+import duke.task.TaskList;
+import duke.task.Task;
+import duke.ui.Ui;
 
 import java.util.ArrayList;
 
 /**
- * Statistics class that gives a report on the task list
+ * StatisticCommand that handles the printing of the report
+ * of the tasks in task list.
  */
-public class Statistic {
+public class StatisticCommand extends Command {
 
     /**
-     * Initialises Statistic class.
-     */
-    public Statistic() {
-    }
-
-    /**
-     * Get the statistic report on the task list
+     * Gets the statistic report on the task list
      * such as number of deadline tasks,
      * number of event tasks, number of To Do tasks
      * and percentage of work done.
      *
      * @param taskList list of tasks
+     * @param ui       Ui class that handles the interaction with user
+     * @param storage  storage file that stores the task list
      * @return string representing the report on the task list
      */
-    public String getStats(TaskList taskList) {
+    @Override
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
         ArrayList<Task> listOfTasks = taskList.getTaskList();
 
         int numOfDeadlineTask = countDeadLineTasks(listOfTasks);
@@ -35,15 +39,16 @@ public class Statistic {
         double percentageDone = ((double) numOfDoneTask / totalTasks) * 100;
 
 
-        return String.format("Number of deadline tasks: %s\n" +
-                        "Number of Event tasks: %s\n" +
-                        "Number of ToDo tasks: %s\n" +
-                        "Percentage of work done: %.2f%%",
+        return String.format("Number of deadline tasks: %s\n"
+                        + "Number of Event tasks: %s\n"
+                        + "Number of ToDo tasks: %s\n"
+                        + "Percentage of work done: %.2f%%",
                 numOfDeadlineTask, numOfEventTask, numOfToDoTask, percentageDone);
     }
 
+
     /**
-     * Count the number of task that is done.
+     * Counts the number of task that is done type.
      *
      * @param tasks tasks in the task list
      * @return total number of task done
@@ -59,7 +64,7 @@ public class Statistic {
     }
 
     /**
-     * Count the number of task that is event.
+     * Counts the number of task that is event type.
      *
      * @param tasks tasks in the task list
      * @return total number of event tasks
@@ -76,7 +81,7 @@ public class Statistic {
     }
 
     /**
-     * Count the number of task that is deadline.
+     * Counts the number of task that is deadline type.
      *
      * @param tasks tasks in the task list
      * @return total number of deadline tasks
@@ -93,10 +98,10 @@ public class Statistic {
     }
 
     /**
-     * Count the number of task that is To Do.
+     * Counts the number of task that is ToDo type.
      *
      * @param tasks task in the task list
-     * @return total number of To Do tasks
+     * @return total number of ToDo tasks
      */
     private int countToDoTasks(ArrayList<Task> tasks) {
         int count = 0;

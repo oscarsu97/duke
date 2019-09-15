@@ -1,29 +1,28 @@
 package duke.command;
 
+import duke.storage.Storage;
 import duke.task.TaskList;
 import duke.ui.Ui;
 
 /**
- * DoneCommand that take care of checking task that is done.
+ * DoneCommand that handles the marking of task as done.
  */
 public class DoneCommand extends Command {
 
-    /**
-     * Initialise DoneCommand class.
-     */
-    public DoneCommand() {
-        super();
+    private int index;
+
+    public DoneCommand(int index) {
+        this.index = index;
     }
 
     /**
-     * Mark the specific task as done in the task list
-     * @param taskDetails details of the task
-     * @param taskList list of the task to be done
-     * @param ui Ui class that takes care of interaction with user
+     * Marks the specific task as done in the task list.
+     *
+     * @param taskList list of the task
+     * @param ui       Ui class that handles interaction with user
      * @return string representing the marked task message
      */
-    public String execute(String[] taskDetails, TaskList taskList, Ui ui){
-        int index = Integer.parseInt(taskDetails[1]) - 1;
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
         taskList.getTask(index).markAsDone();
         return ui.printMarkedTask(taskList.getTask(index));
     }

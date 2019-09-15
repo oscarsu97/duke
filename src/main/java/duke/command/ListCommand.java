@@ -1,24 +1,22 @@
 package duke.command;
 
+import duke.storage.Storage;
 import duke.task.TaskList;
 import duke.ui.Ui;
 
-public class ListCommand extends Command{
+/**
+ * ListCommand that handles the printing of tasks in tasklist to show to user.
+ */
+public class ListCommand extends Command {
 
     /**
-     * Initialises ListCommand class.
-     */
-    public ListCommand(){
-        super();
-    }
-
-    /**
-     * Get the list of tasks for printing.
+     * Prints the list of tasks in task list.
+     *
      * @param taskList list of tasks
-     * @param ui Ui that deals with interaction with the user
+     * @param ui       Ui that deals with interaction with the user
      * @return string representing the list of tasks
      */
-    public String execute(TaskList taskList, Ui ui){
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
         return ui.printTaskList(taskList);
     }
 }

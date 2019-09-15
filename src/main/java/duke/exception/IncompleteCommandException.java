@@ -1,27 +1,12 @@
 package duke.exception;
 
 /**
- * Exception class that deals with incomplete user's command input.
+ * Exception class that handles incomplete user's command input.
  */
-public class IncompleteCommandException extends Exception {
-    public String msg;
+public class IncompleteCommandException extends DukeException {
 
-    /**
-     * initialise Exception class with a string message.
-     *
-     * @param msg message to send to user
-     */
     public IncompleteCommandException(String msg) {
-        this.msg = msg;
+        super(msg);
     }
 
-    /**
-     * Return a string representation of the class.
-     *
-     * @return String representation
-     */
-    @Override
-    public String toString() {
-        return "☹ OOPS!!! " + msg;
-    }
 }

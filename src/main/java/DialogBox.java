@@ -51,6 +51,12 @@ public class DialogBox extends HBox {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Gets the DialogBox for the response by Duke.
+     * @param text text representing the response to display in dialog box
+     * @param img image of Duke chat bot
+     * @return Dialog box where ImageView is on the left and text response on the right
+     */
     public static DialogBox getDukeDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

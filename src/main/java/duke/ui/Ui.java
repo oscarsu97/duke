@@ -6,16 +6,9 @@ import duke.task.TaskList;
 import java.util.ArrayList;
 
 /**
- * Represents a User Interface that deals with interactions with the user.
+ * Represents a User Interface that handles interaction with the user.
  */
 public class Ui {
-
-    /**
-     * initialise ui class with an empty parameter.
-     */
-    public Ui() {
-
-    }
 
     /**
      * Prints the welcome message.
@@ -33,7 +26,7 @@ public class Ui {
     }
 
     /**
-     * Prints the sentence for the task list.
+     * Prints the list of tasks in the task list.
      */
     public String printTaskList(TaskList taskList) {
         String str = "Here are the tasks in your list:\n";
@@ -66,7 +59,7 @@ public class Ui {
     }
 
     /**
-     * print the task message to show to the user
+     * Prints the task added message.
      *
      * @param taskList the task list that store all the tasks
      * @return the string message
@@ -75,7 +68,7 @@ public class Ui {
         int taskListSize = taskList.getTaskListSize();
         Task task = taskList.getTask(taskListSize - 1);
         String str = "Got it. I've added this task:\n" + task
-                + "\nNow you have " + taskListSize + " tasks in the list";
+                + "\nNow you have " + taskListSize + " tasks in the list.";
         return str;
     }
 

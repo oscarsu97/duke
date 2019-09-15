@@ -1,5 +1,7 @@
 package duke.storage;
 
+import duke.exception.DukeException;
+import duke.exception.InvalidCommandException;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * storage class that deals with loading tasks from the file and saving tasks in the file.
+ * Storage class that handles the loading of tasks from storage file and saving tasks into storage file.
  */
 public class Storage {
     private String filePath;
@@ -27,18 +29,17 @@ public class Storage {
     }
 
     /**
-     * Load the list of tasks from duke.txt file,
-     * if file could not be file, it will tell user
-     * that file could not be found and an empty ArrayList of tasks
+     * Loads the list of tasks from storage file,
+     * if file could not be found, it will return an empty ArrayList of tasks instead.
      *
-     * @return an ArrayList that contains the tasks to do
+     * @return an ArrayList that contains the list of tasks
      */
-    public ArrayList<Task> load() {
+    public ArrayList<Task> load() throws DukeException {
         try {
             sc = new Scanner(new File(filePath));
             readFile();
         } catch (FileNotFoundException e) {
-            System.out.println("could not find file");
+            throw new DukeException("file not found");
         }
         return tasks;
     }
@@ -48,82 +49,91 @@ public class Storage {
      * determine the type of task and add them to the
      * task list.
      */
-    public void readFile() {
+    public void readFile() throws InvalidCommandException {
         while (sc.hasNext()) {
-            String line = sc.nextLine();
-            String[] taskDetails = line.split("[|]");
+            String data = sc.nextLine();
+            String[] taskDetails = data.split("[|]");
             String taskType = taskDetails[0].trim();
-            String taskDescription;
-            String dateTime;
-            LocalDateTime localDateTime;
-            boolean isDone = false;
-            if (taskDetails[1].trim().equals("1")) {
-                isDone = true;
-            }
 
             switch (taskType) {
             case "T":
-                Task toDoTask = new ToDo(taskDetails[2].trim());
-                if (isDone) {
-                    toDoTask.markAsDone();
-                }
-                tasks.add(toDoTask);
+                addToDoTask(taskDetails);
                 break;
             case "D":
-                taskDescription = taskDetails[2].trim();
-                dateTime = taskDetails[3].trim();
-                localDateTime = readLocalDateTime(dateTime);
-                Task deadlineTask = new Deadline(taskDescription, localDateTime, dateTime);
-                if (isDone) {
-                    deadlineTask.markAsDone();
-                }
-                tasks.add(deadlineTask);
+                addDeadlineTask(taskDetails);
                 break;
             case "E":
-                taskDescription = taskDetails[2].trim();
-                dateTime = taskDetails[3].trim();
-                localDateTime = readLocalDateTime(dateTime);
-                Task eventTask = new Event(taskDescription, localDateTime, dateTime);
-                if (isDone) {
-                    eventTask.markAsDone();
-                }
-                tasks.add(eventTask);
+                addEventTask(taskDetails);
+
                 break;
             default:
-                System.out.println("invalid format of data input");
-                break;
+                throw new InvalidCommandException("command of this file cannot be recognised");
             }
         }
     }
 
     /**
-     * Update file with a given format based on the type of task.
-     * in the task list
+     * Adds ToDo task into task list.
      *
-     * @param taskList list of tasks
+     * @param taskDetails contains task description
+     */
+    private void addToDoTask(String[] taskDetails) {
+        Task toDoTask = new ToDo(taskDetails[2].trim());
+        boolean isDone = taskDetails[1].trim().equals("1");
+        if (isDone) {
+            toDoTask.markAsDone();
+        }
+        tasks.add(toDoTask);
+    }
+
+    /**
+     * Adds Deadline task into task list and
+     * converts string date time into LocalDateTime.
+     *
+     * @param taskDetails contains task description, date and time
+     */
+    private void addDeadlineTask(String[] taskDetails) {
+        String taskDescription = taskDetails[2].trim();
+        LocalDateTime dateTime = readLocalDateTime(taskDetails[3].trim());
+
+        Task deadlineTask = new Deadline(taskDescription, dateTime);
+        boolean isDone = taskDetails[1].trim().equals("1");
+        if (isDone) {
+            deadlineTask.markAsDone();
+        }
+        tasks.add(deadlineTask);
+    }
+
+    /**
+     * Adds Event task into task list and
+     * converts string date time into LocalDateTime.
+     *
+     * @param taskDetails contains task description, date and time
+     */
+    private void addEventTask(String[] taskDetails) {
+        String taskDescription = taskDetails[2].trim();
+        LocalDateTime dateTime = readLocalDateTime(taskDetails[3].trim());
+
+        Task eventTask = new Event(taskDescription, dateTime);
+        boolean isDone = taskDetails[1].trim().equals("1");
+        if (isDone) {
+            eventTask.markAsDone();
+        }
+        tasks.add(eventTask);
+    }
+
+    /**
+     * Updates file with a given format based on the type of task
+     * in the task list.
+     *
+     * @param taskList list of tasks to update into storage file
      */
     public void updateFile(ArrayList<Task> taskList) {
         try {
             FileWriter fileWriter = new FileWriter(filePath, false);
-            String taskFormat;
-            String done;
-
             for (Task task : taskList) {
-                done = task.isDone() ? "1" : "0";
-                if (task instanceof ToDo) {
-                    taskFormat = String.format("T | %s | %s", done, task.getDescription());
-                    fileWriter.write(taskFormat + "\n");
-                }
-                if (task instanceof Deadline) {
-                    taskFormat = String.format("D | %s | %s | %s", done, task.getDescription(),
-                            ((Deadline) task).getDateTime());
-                    fileWriter.write(taskFormat + "\n");
-                }
-                if (task instanceof Event) {
-                    taskFormat = String.format("E | %s | %s | %s", done, task.getDescription(),
-                            ((Event) task).getDateTime());
-                    fileWriter.write(taskFormat + "\n");
-                }
+                String taskFormat = getTaskFormat(task);
+                fileWriter.write(taskFormat + "\n");
             }
             fileWriter.close();
         } catch (IOException e) {
@@ -132,7 +142,30 @@ public class Storage {
     }
 
     /**
-     * Convert string value of date and time
+     * Converts task into proper string format before storing it.
+     *
+     * @param task the task to convert into string format
+     * @return string format of task
+     */
+    private String getTaskFormat(Task task) {
+        String taskType;
+        String isDone = task.isDone() ? "1" : "0";
+        if (task instanceof ToDo) {
+            taskType = "T";
+            return String.format("%s | %s | %s", taskType, isDone, task.getDescription());
+        } else if (task instanceof Deadline) {
+            taskType = "D";
+            return String.format("%s | %s | %s | %s",
+                    taskType, isDone, task.getDescription(), ((Deadline) task).getDateTime());
+        } else {
+            taskType = "E"; // Event Task
+            return String.format("%s | %s | %s | %s",
+                    taskType, isDone, task.getDescription(), ((Event) task).getDateTime());
+        }
+    }
+
+    /**
+     * Converts string value of date and time
      * into LocalDateTime format.
      *
      * @param dateTime string representing the date and time

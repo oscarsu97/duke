@@ -5,26 +5,30 @@ import duke.task.TaskList;
 import duke.ui.Ui;
 
 /**
- * ByeCommand that deals with "bye" command.
+ * ByeCommand that handles the storage of updated task list
+ * into storage file and exiting.
  */
-public class ByeCommand extends Command{
+public class ByeCommand extends Command {
 
     /**
      * Initialise ByeCommand class.
      */
-    public ByeCommand(){
+    public ByeCommand() {
         super();
     }
 
     /**
-     * Update text file with the updated task list.
-     * @param ui Ui class that deals with interaction with user
-     * @param storage Storage class that deals with storage of data
+     * Updates text file with the updated task list
+     * and prints the goodbye message.
+     *
+     * @param ui       Ui class that deals with interaction with user
+     * @param storage  Storage class that deals with storage of data
      * @param taskList list of tasks stored
-     * @return string representing good bye meessage
+     * @return string representing good bye message
      */
-    public String execute(Ui ui, Storage storage, TaskList taskList){
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
         storage.updateFile(taskList.getTaskList());
+        setExit(true);
         return ui.showGoodbye();
     }
 }

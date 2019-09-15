@@ -1,28 +1,12 @@
 package duke.exception;
 
 /**
- * Exception class that deals with invalid command given by user.
+ * Exception class that handles with invalid command given by user
+ * which the bot cannot recognise.
  */
-public class InvalidCommandException extends Exception {
+public class InvalidCommandException extends DukeException {
 
-    public String msg;
-
-    /**
-     * initialise Exception class with a string message.
-     *
-     * @param msg message to send to user
-     */
     public InvalidCommandException(String msg) {
-        this.msg = msg;
-    }
-
-    /**
-     * Return a string representation of the class.
-     *
-     * @return String representation
-     */
-    @Override
-    public String toString() {
-        return "☹ OOPS!!! " + msg;
+        super(msg);
     }
 }

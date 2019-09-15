@@ -4,33 +4,31 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents a Event class that start at a specific time and ends at a specific time.
+ * Represents a Event class that starts at a specific time and ends at a specific time.
  */
 public class Event extends Task {
     private LocalDateTime localDateTime;
     private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/YYYY HHmm");
-    private String dateTime;
 
     /**
-     * Initialise Event task with description of task and the date and time to be completed.
+     * Initialises Event task with description of task and the date and time to be completed.
      *
-     * @param description description of task
+     * @param description   description of task
      * @param localDateTime local date and time to be completed
      */
-    public Event(String description, LocalDateTime localDateTime, String dateTime) {
+    public Event(String description, LocalDateTime localDateTime) {
         super(description);
         this.localDateTime = localDateTime;
-        this.dateTime = dateTime;
     }
 
     /**
-     * Get the date and time of the task.
+     * Gets the date and time of the task in string.
      *
-     * @return date and time to be completed
+     * @return date and time to be completed in string
      */
     public String getDateTime() {
-        assert dateTime != null : "dateTime is not initialised";
-        return dateTime;
+        assert localDateTime != null : "dateTime is not initialised";
+        return localDateTime.format(dateTimeFormat);
     }
 
     /**

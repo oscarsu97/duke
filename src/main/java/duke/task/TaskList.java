@@ -12,14 +12,14 @@ public class TaskList {
     private ArrayList<Task> taskList;
 
     /**
-     * initialise TaskList with an empty ArrayList.
+     * Initialises TaskList with an empty ArrayList.
      */
     public TaskList() {
         taskList = new ArrayList<>();
     }
 
     /**
-     * initialise TaskList with a given task list.
+     * Initialises TaskList with a given task list.
      *
      * @param taskList list of tasks
      */
@@ -28,7 +28,7 @@ public class TaskList {
     }
 
     /**
-     * Add a new task into the task list.
+     * Adds a new task into the task list.
      *
      * @param task task to be added
      */
@@ -37,9 +37,9 @@ public class TaskList {
     }
 
     /**
-     * Delete a task from the task list.
+     * Deletes a task from the task list.
      *
-     * @param index the task index in the task list
+     * @param index the task index of the task to be deleted from the task list
      */
     public void deleteTask(int index) {
         taskList.remove(index);
@@ -57,14 +57,14 @@ public class TaskList {
     /**
      * Returns the size of the list of task.
      *
-     * @return int value of the size of the list
+     * @return integer value of the size of the list
      */
     public int getTaskListSize() {
         return taskList.size();
     }
 
     /**
-     * Get a specified task from the list.
+     * Gets a specified task from the list.
      *
      * @param index the index of the task in the task list
      * @return the specified task
@@ -78,32 +78,46 @@ public class TaskList {
     }
 
     /**
-     * Find task that matches the keyword.
+     * Finds task that matches the keyword and adds them into
+     * an ArrayList containing all tasks that matches the keyword.
      *
-     * @param keyword the string to look for
-     * @return ArrayList that contain all tasks that match the keyword
+     * @param keyword string value to match to when finding task
+     * @return ArrayList that contains all tasks that matches the keyword
      */
     public ArrayList<Task> findMatchingTasks(String keyword) {
         ArrayList<Task> matchingTasks = new ArrayList<>();
         for (Task task : taskList) {
-            if (task instanceof Deadline) {
-                Deadline deadlineTask = (Deadline) task;
-                if (deadlineTask.getDateTime().contains(keyword)) {
-                    matchingTasks.add(deadlineTask);
-                }
-            } else if (task instanceof Event) {
-                Event eventTask = (Event) task;
-                if (eventTask.getDateTime().contains(keyword)) {
-                    matchingTasks.add(eventTask);
-                }
-            }
-            //Check if Deadline, Event or To do task's description contains keyword
-            if (task.getDescription().contains(keyword)) {
-                matchingTasks.add(task);
+            if (checkKeyWord(task, keyword)) {
+                addToMatchingTasks(task, matchingTasks);
             }
         }
         return matchingTasks;
     }
 
+    private void addToMatchingTasks(Task task, ArrayList<Task> matchingTasks) {
+        matchingTasks.add(task);
+    }
 
+    /**
+     * Checks if the task details has detail that matches with the keyword.
+     *
+     * @param task    task to check for matching keyword
+     * @param keyword keyword to match
+     * @return boolean value that determine if a keyword is contained in the task details
+     */
+    private boolean checkKeyWord(Task task, String keyword) {
+        boolean hasKeyWord = false;
+        if (task instanceof Deadline) {
+            hasKeyWord = ((Deadline) task).getDateTime().contains(keyword);
+        }
+        if (task instanceof Event) {
+            hasKeyWord = ((Event) task).getDateTime().contains(keyword);
+        }
+        if (hasKeyWord) {
+            return true;
+        }
+        //Check if Deadline, Event or ToDo task's description contains keyword
+        hasKeyWord = task.getDescription().contains(keyword);
+        return hasKeyWord;
+    }
 }
