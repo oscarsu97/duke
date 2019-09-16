@@ -16,7 +16,6 @@ import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.TaskList;
 import duke.task.ToDo;
-
 import java.time.LocalDateTime;
 
 /**
@@ -167,7 +166,6 @@ public class Parser {
         return new StatisticCommand();
     }
 
-
     /**
      * Handle possible error in the input given by the user.
      * It checks whether command is valid and then checks
@@ -210,12 +208,10 @@ public class Parser {
             String[] taskDetails = input.split("/at");
             checkCompleteDateTimeFormat(taskDetails[1].trim());
 
-        } else if (input.startsWith("done") || input.startsWith("delete")
-                || input.startsWith("find") || input.startsWith("todo")) {
+        } else if (input.startsWith("done") || input.startsWith("delete")) {
             checkMinimumSize(input, 2);
         }
     }
-
 
     /**
      * Checks whether the input has fulfilled the minimum length
