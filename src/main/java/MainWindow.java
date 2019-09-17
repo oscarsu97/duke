@@ -22,7 +22,7 @@ public class MainWindow extends AnchorPane {
     private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
 
     /**
-     * Initialises Duke chat box and display welcome message to the user.
+     * Initialises Duke chat bot and display welcome message to the user.
      */
     @FXML
     public void initialize() {
