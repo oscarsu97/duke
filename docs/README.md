@@ -1,43 +1,91 @@
-# User Guide
+# 1.Introduction
 Duke is a chat bot that helps user manage their task list.
 It has the ability to create, read, update and delete a task 
-in the task list depending on the command given by the user.
-## Features 
+in the task list depending on the command given by the user.  
+![](https://i.ibb.co/9Gnmkkz/duke.png)
+# 2.Requirement  
+Ensure you have Java `11` installed.
 
-#### Feature 1 - Adding a task 
-There are 3 types of tasks that can be added into the tasklist - `deadline`, `event`, `todo`
+# 3.Features 
+**Command Format**
+* Words in UPPER_CASE are the parameters to be supplied by the user. e.g in 
+`todo TASK_DESCRIPTION`, `TASK_DESCRIPTION` is a parameter and can be used as `todo read book`. 
+* For date and time format in `dd/MM/YYYY HHmm`, `dd` represents day, `MM` represents month,
+`YYYY` represents year, `HH` represents hour and `mm` represents minute. E.g. `12/12/2019 2200`. 
+* Word named `INDEX` is the parameter to be supplied by the user and they have to be integer number. eg. 
+`delete INDEX`can be used as `delete 3`.
+### 3.1. Adding a task: `todo`, `deadline`, `event`  
     
-## Usage
-**`todo`**: Type "**todo {Your task description}**" into the dialog box.    
+**1.** Adds a ToDo task with the given description into tasklist.  
+Format: `todo TASK_DESCRIPTION`  
 
-This will add a ToDo task with the given description into tasklist.  
+Example:
 
-<br/>
-
-**`deadline`**: Type "**deadline {Your task description} /by dd/MM/YYYY HHmm**" into the dialog box.    
-
-This will add a Deadline task with the given description, date and time into tasklist.  
+  * `todo read book` 
+  * `todo run`
 
 <br/>
 
-**`event`**: Type "**event {Your task description} /by dd/MM/YYYY HHmm**" into the dialog box.    
+**2.** Adds a deadline task with the given description into tasklist.  
+Format: `deadline TASK_DESCRIPTION /by dd/MM/YYYY HHmm`
 
-This will add an Event task with the given description, date and time into tasklist.  
+Example:
+  * `deadline read book /by 12/12/2019 1300`
+  * `deadline run /by 12/12/2019 1200`  
 
 <br/>
 
-### Example of usage:   
-
-todo watch spiderman 3  
-deadline Team Project /by 19/12/2019 2359  
-event NUS career fair /at 12/12/2019 1200   
-
-### Expected outcome:
-
-`todo watch spiderman 3`:    
+**3.** Adds an event task with the given description into tasklist.  
+Format: `event TASK_DESCRIPTION /at dd/MM/YYYY HHmm`    
   
-![](https://i.ibb.co/r3Mh85f/todo.png)  
+Example:  
+  * `deadline read book /by 12/12/2019 1300`
+  * `deadline run /by 12/12/2019 1200`  
+<br/>  
+<br/>  
 
-`deadline Team Project /by 19/12/2019 2359`
+### 3.2. Deleting a task: `delete`
 
-`event NUS career fair /at 12/12/2019 1200`
+Deletes a task with the specified index from the tasklist.  
+Format: `delete INDEX`
+
+Example:  
+  
+  * `delete 3`  
+<br/>    
+<br/>  
+  
+### 3.3. Listing tasklist: `list`
+Prints the list of tasks that are stored in the task list.  
+Format:`list`   
+<br/>    
+
+### 3.4. Finding tasks that match keyword: `find`  
+Prints a list of tasks that matches keyword given by user.  
+Format:`find KEYWORD`    
+
+Example:  
+  
+  * `find read`  
+
+  <br/>  
+  
+### 3.5. Mark a task as done: `done`   
+Mark the specified task in the task list as done.    
+Format:`done INDEX`      
+
+Example:  
+  
+  * `done 2`   
+
+<br/>    
+
+### 3.6. Exiting: `bye`   
+Prints goodbye message and store updated task list in storage file.    
+Format:`bye`      
+
+<br/> 
+
+### 3.7. Gets statistic report: `statistics`   
+Prints statistic report on the different type of task to do and percentage of work done.    
+Format:`statistics`    

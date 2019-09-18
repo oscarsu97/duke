@@ -30,16 +30,24 @@ public class Storage {
 
     /**
      * Loads the list of tasks from storage file,
-     * if file could not be found, it will return an empty ArrayList of tasks instead.
+     * if file could not be found, it will create a data folder
+     * with an empty duke.txt inside that folder.
      *
-     * @return an ArrayList that contains the list of tasks
+     * @return an ArrayList that contains the list of tasks stored
      */
     public ArrayList<Task> load() throws DukeException {
         try {
-            sc = new Scanner(new File(filePath));
+
+            File directory = new File("data");
+            directory.mkdir();              // creates folder if "data" folder cannot be found
+            File f = new File(filePath);
+            f.createNewFile();              // creates duke.txt if it does not exist
+            sc = new Scanner(f);
             readFile();
         } catch (FileNotFoundException e) {
             throw new DukeException("file not found");
+        } catch (IOException e) {
+            throw new DukeException(e.getMessage());
         }
         return tasks;
     }
