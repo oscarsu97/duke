@@ -33,12 +33,12 @@ public class DialogBox extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        dialog.setStyle("-fx-padding: 20;" +
-                "-fx-border-style: solid inside;" +
-                "-fx-border-width: 2;" +
-                "-fx-border-insets: 5;" +
-                "-fx-border-radius: 5;" +
-                "-fx-border-color: white;");
+        dialog.setStyle("-fx-padding: 20;"
+                + "-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;"
+                + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;"
+                + "-fx-border-color: white;");
         dialog.setText(text);
         displayPicture.setImage(img);
     }
@@ -59,8 +59,9 @@ public class DialogBox extends HBox {
 
     /**
      * Gets the DialogBox for the response by Duke.
+     *
      * @param text text representing the response to display in dialog box
-     * @param img image of Duke chat bot
+     * @param img  image of Duke chat bot
      * @return Dialog box where ImageView is on the left and text response on the right
      */
     public static DialogBox getDukeDialog(String text, Image img) {
